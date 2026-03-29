@@ -1,10 +1,15 @@
 from django.db import models
 
 class Topic(models.Model):
-    title = models.CharField(max_length=255, null=False)
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    is_available = models.BooleanField(default=True)
 
-    class Meta:
-        verbose_name = "Тема диплома"
-        verbose_name_plural = "Темы дипломов"
+    supervisor = models.ForeignKey(
+        'users.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='topics'
+    )
+
+    is_available = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
