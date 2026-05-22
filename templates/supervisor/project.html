@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>{{ project.student }}</h3>
+<p>{{ project.topic.title }}</p>
+
+<h5>📄 Документы</h5>
+
+<ul>
+    {% for doc in documents %}
+        <li>
+            <a href="{{ doc.file.url }}" target="_blank">
+                {{ doc.file.name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h5 class="mt-4">📊 Этапы</h5>
+
+<ul>
+    {% for stage in stages %}
+        <li>
+            {{ stage.name }} — {{ stage.status }}
+        </li>
+    {% endfor %}
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+
+    <select name="status" class="form-select mb-2">
+        <option value="active">Active</option>
+        <option value="review">Review</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <button class="btn btn-success">Обновить статус</button>
+</form>
+
+{% endblock %}

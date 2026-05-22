@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Этапы
+{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4">
+    Этапы выполнения
+</h2>
+
+<div class="dashboard-card">
+
+    {% for stage in project.stages.all %}
+
+        <div class="timeline-step">
+
+            <h5>{{ stage.name }}</h5>
+
+            <p>
+                Статус:
+                <b>{{ stage.status }}</b>
+            </p>
+
+            <p>
+                Deadline:
+                {{ stage.deadline }}
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p>Этапов пока нет.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

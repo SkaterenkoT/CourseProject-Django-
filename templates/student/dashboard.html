@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Мой проект
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .timeline-step {
+            border-left: 4px solid #3b82f6;
+
+            padding-left: 20px;
+
+            margin-bottom: 24px;
+        }
+
+        .timeline-step h6 {
+            font-weight: 700;
+        }
+
+        .upload-box {
+            border: 2px dashed #cbd5e1;
+
+            border-radius: 16px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            background: white;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #e5e7eb;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        .timeline-step.done::before {
+            background: #22c55e;
+        }
+</style>
+
+
+<h2 class="fw-bold mb-4">📚 Мой дипломный проект</h2>
+
+<div class="dashboard-card mb-4 p-3">
+
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+            <h3>{{ project.topic.title }}</h3>
+
+            <p class="text-muted mb-0">
+                Руководитель: {{ project.supervisor.get_full_name|default:project.supervisor }}
+            </p>
+        </div>
+
+        <div>
+            <span class="badge 
+                {% if project.status == 'active' %}bg-success
+                {% elif project.status == 'in_progress' %}bg-warning
+                {% else %}bg-secondary{% endif %}">
+                {{ project.status }}
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row g-4">
+
+    <!-- ЭТАПЫ -->
+    <div class="col-md-8">
+
+        <div class="dashboard-card p-3">
+
+            <h4 class="mb-4">📌 Этапы выполнения</h4>
+
+            <div class="timeline">
+
+                {% for stage in project.stages.all %}
+
+                    <div class="timeline-step 
+                        {% if stage.status == 'approved' %}done{% endif %}">
+
+                        <h6 class="mb-1">{{ stage.name }}</h6>
+
+                        <span class="badge 
+                            {% if stage.status == 'approved' %}bg-success
+                            {% elif stage.status == 'in_review' %}bg-warning
+                            {% elif stage.status == 'rejected' %}bg-danger
+                            {% else %}bg-secondary{% endif %}">
+                            {{ stage.status }}
+                        </span>
+
+                        <p class="text-muted mt-2 mb-0">
+                            📅 Deadline: {{ stage.deadline }}
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIDEBAR -->
+    <div class="col-md-4">
+
+        <!-- ПРОГРЕСС -->
+        <div class="dashboard-card p-3 mb-4">
+
+            <h5>📈 Прогресс</h5>
+
+            <div class="progress-bar 
+                {% if progress < 30 %}bg-danger
+                {% elif progress < 70 %}bg-warning
+                {% else %}bg-success
+                {% endif %}"
+                style="width: {{ progress }}%;">
+                {{ progress }}%
+            </div>
+
+        </div>
+
+
+        <!-- ДОКУМЕНТЫ -->
+        <div class="dashboard-card p-3">
+
+            <h5>📄 Документы</h5>
+
+            <ul class="list-group list-group-flush mt-3">
+
+                {% for document in project.documents.all %}
+
+                    <li class="list-group-item d-flex justify-content-between">
+
+                        <span>{{ document.file.name|slice:"-30:" }}</span>
+
+                        <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary">
+                            Открыть
+                        </a>
+
+                    </li>
+
+                {% empty %}
+
+                    <li class="list-group-item text-muted">
+                        Нет загруженных документов
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

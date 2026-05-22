@@ -1,0 +1,13 @@
+from django import forms
+from .models import Document
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['file', 'stage']
+
+        widgets = {
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'stage': forms.Select(attrs={'class': 'form-select'}),
+        }

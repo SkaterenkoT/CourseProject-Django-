@@ -1,25 +1,48 @@
 from django.db import models
-from projects.models import Project
+
 
 class Stage(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Ожидает'),
-        ('in_review', 'На проверке'),
-        ('approved', 'Одобрено'),
-        ('rejected', 'На доработке'),
-    ]
+
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Ожидает'
+        IN_REVIEW = 'in_review', 'На проверке'
+        APPROVED = 'approved', 'Одобрено'
+        REJECTED = 'rejected', 'На доработке'
 
     project = models.ForeignKey(
-        Project,
+        'projects.Project',
         on_delete=models.CASCADE,
         related_name='stages'
     )
 
-    name = models.CharField(max_length=100)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    name = models.CharField(
+        max_length=100
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING
+    )
 
     deadline = models.DateField()
-    order = models.IntegerField()
+
+    order = models.PositiveIntegerField()
+
+    comment = models.TextField(
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ['order']
+        unique_together = ('project', 'order')
+
+        verbose_name = 'Этап'
+        verbose_name_plural = 'Этапы'
 
     def __str__(self):
-        return self.name
+        return f"{self.project} - {self.name}"

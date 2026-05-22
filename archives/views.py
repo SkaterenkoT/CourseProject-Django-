@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from .models import Archive
+from .serializers import ArchiveSerializer
 
-# Create your views here.
+
+class ArchiveViewSet(ModelViewSet):
+    queryset = Archive.objects.all()
+    serializer_class = ArchiveSerializer

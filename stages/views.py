@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from .models import Stage
+from .serializers import StageSerializer
 
-# Create your views here.
+
+class StageViewSet(ModelViewSet):
+    queryset = Stage.objects.all()
+    serializer_class = StageSerializer

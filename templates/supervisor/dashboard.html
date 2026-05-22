@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">👨‍🏫 Панель руководителя</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Тема</th>
+            <th>Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for project in projects %}
+        <tr>
+            <td>{{ project.student }}</td>
+            <td>{{ project.topic.title }}</td>
+            <td>{{ project.status }}</td>
+
+            <td>
+                <a href="{% url 'supervisor_project' project.id %}" class="btn btn-sm btn-primary">
+                    Открыть
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
